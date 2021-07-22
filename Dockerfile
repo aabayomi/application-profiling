@@ -1,4 +1,4 @@
-ARG APP_NAME
+#ARG APP_NAME
 FROM chrispkraemer/tauprofiler:0.0.0 as builder
 
 # ===== INSTALL TAU =====
@@ -19,9 +19,9 @@ FROM chrispkraemer/tauprofiler:0.0.0 as builder
 #RUN chmod +x tauprofiler.sh
 #ENTRYPOINT ["/bin/sh"]
 
-ARG APP_NAME
+#ARG APP_NAME
 #FROM waggle/plugin-objectcounter:0.0.0
-FROM $APP_NAME
+#FROM $APP_NAME
 
 # ===== COPY OVER TAU INSTALL =====
 COPY --from=builder /tau /tau
