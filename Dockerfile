@@ -35,6 +35,7 @@ WORKDIR /app
 COPY tauprofiler.sh .
 
 # ===== SETUP PROFILING SCRIPT =====
-COPY --from=builder /tau/wrappertest.py /app/wrappertest.py
+#COPY --from=builder /tau/wrappertest.py /app/wrappertest.py
+COPY wrappertest.py .
 ENTRYPOINT ["./tauprofiler.sh"]
 
