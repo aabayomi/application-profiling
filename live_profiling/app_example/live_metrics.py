@@ -4,6 +4,8 @@ import sys
 from collections import deque
 import time
 import threading
+import logging
+from waggle.plugin import Plugin
 
 
 def parse_tegra_stats(stats_str: str) -> dict:
@@ -107,6 +109,11 @@ class SageAppMetricsServer:
             if len(self.metric_queue) > 0:
                 metric_to_send = self.metric_queue.pop()
                 print('[METRICS] Sending: %s' % metric_to_send)
+                
+                with Plugin() as plugin:
+                    logging.info("publishing metrics")
+                    plugin.publish("test", metric_to_send)
+
                 # try:
                 #     self.socket.sendall(metric_to_send.encode() + b'\n\n')
                 # except BrokenPipeError:
