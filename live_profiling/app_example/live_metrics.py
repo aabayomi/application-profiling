@@ -113,7 +113,7 @@ class SageAppMetricsServer:
                 #     print('[METRICS] BrokenPipeError, exiting...')
                 #     sys.exit(-1)
 
-    def __init__(self, metrics: dict, socket_path="/metrics/live_metrics.sock"):
+    def __init__(self, metrics: dict, socket_path="/var/run/docker.sock"):
         """
         Init server with a dictionary of
             {metric_name: METRIC_TYPE}
