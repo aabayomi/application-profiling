@@ -89,6 +89,30 @@ class SageAppMetricsServer:
                     print('[METRICS] BrokenPipeError, exiting...')
                     sys.exit(-1)
 
+
+    def host_metrics_server2(self):
+        """
+        A thread that runs in the background which sends metrics immediately to the custom Prometheus client when a new
+        metric arrives in the queue.
+        """
+        report_cycle = 0
+        while True:
+            time.sleep(0.5)  # A little delay so that this thread doesn't fry the CPU
+
+            # Every half-second report RAM usage of the currently-running container
+            if report_cycle % 5 == 0:
+                self.push_metric('RAM_usage', get_container_memory())
+            report_cycle += 1
+
+            if len(self.metric_queue) > 0:
+                metric_to_send = self.metric_queue.pop()
+                print('[METRICS] Sending: %s' % metric_to_send)
+                # try:
+                #     self.socket.sendall(metric_to_send.encode() + b'\n\n')
+                # except BrokenPipeError:
+                #     print('[METRICS] BrokenPipeError, exiting...')
+                #     sys.exit(-1)
+
     def __init__(self, metrics: dict, socket_path="/metrics/live_metrics.sock"):
         """
         Init server with a dictionary of
@@ -104,7 +128,9 @@ class SageAppMetricsServer:
         self.socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         self.connect_to_metrics_socket()
         # Launch server loop in the background as a thread
-        self.server_thread = threading.Thread(target=self.host_metrics_server)
+        # self.server_thread = threading.Thread(target=self.host_metrics_server)
+
+        self.server_thread = threading.Thread(target=self.host_metrics_server2)
         self.server_thread.start()
 
     def push_metric(self, metric_name: str, metric_value: object):
