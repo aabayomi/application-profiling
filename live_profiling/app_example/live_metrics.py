@@ -111,7 +111,7 @@ class SageAppMetricsServer:
                 print('[METRICS] Sending: %s' % metric_to_send)
                 
                 with Plugin() as plugin:
-                    logging.info("publishing metrics")
+                    print("publishing hello world!")
                     plugin.publish("test", metric_to_send)
 
                 # try:
