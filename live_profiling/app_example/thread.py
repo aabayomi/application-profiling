@@ -15,7 +15,7 @@ class thread:
         threads = list()
         for index in range(len(self.jobs)):
             logging.info("Main    : create and start thread %d.", index)
-            x = threading.Thread(target=self.jobs[index], args=(index,))
+            x = threading.Thread(target=self.jobs[index])
             threads.append(x)
             x.start()
 

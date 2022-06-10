@@ -10,10 +10,10 @@ if __name__ == '__main__':
     format = "%(asctime)s: %(message)s"
     logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
 
-    metric_service = profiler('main.py')
+    metric_service = profiler('firstprime.py')
     print(metric_service.metric)
 
-    job_list = [metric_service.runTau,metric_service.runSystemProfile]ß
+    job_list = [metric_service.runTau,metric_service.runSystemProfile]
     job = thread(job_list)
     job.run_job
 

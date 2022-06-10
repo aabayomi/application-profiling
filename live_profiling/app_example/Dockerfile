@@ -34,4 +34,4 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
 RUN apt-get update && apt-get install -y vim
 
 # ENTRYPOINT ["python3", "/app/app.py"]
-~                                           
+                                      

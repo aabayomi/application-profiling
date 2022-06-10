@@ -46,7 +46,7 @@ class profiler:
         if Path(self.filename).is_file():
             cmd = "tau_python"
             temp = subprocess.Popen(
-                "tau_python -ebs -T serial,python", shell=True, stdout=subprocess.PIPE
+                "tau_python -ebs -T serial,python firstprime.py", shell=True, stdout=subprocess.PIPE
             )
             print(str(temp.communicate()))
         else:
