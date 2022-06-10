@@ -1,11 +1,21 @@
 from live_metrics import SageAppMetricsServer
 from runtime_metrics import profiler
+from thread import thread
+import logging
+import threading
 import time
 
 
 if __name__ == '__main__':
+    format = "%(asctime)s: %(message)s"
+    logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
 
     metric_service = profiler('main.py')
+    print(metric_service.metric)
+
+    job_list = [metric_service.runTau,metric_service.runSystemProfile]ß
+    job = thread(job_list)
+    job.run_job
 
     while True:
         time.sleep(1)

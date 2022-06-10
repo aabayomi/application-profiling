@@ -14,7 +14,6 @@ def get_container_memory() -> int:
     """ Returns the memory usage of the container that this script is running in. """
     return int(open("/sys/fs/cgroup/memory/memory.usage_in_bytes").readline()[:-1])
 
-
 class profiler:
     def __init__(self, filename, socket_path="/var/run/docker.sock"):
 
@@ -47,7 +46,7 @@ class profiler:
         if Path(self.filename).is_file():
             cmd = "tau_python"
             temp = subprocess.Popen(
-                [cmd, "-ebs -T serial,python", self.filename], stdout=subprocess.PIPE
+                "tau_python -ebs -T serial,python", shell=True, stdout=subprocess.PIPE
             )
             print(str(temp.communicate()))
         else:
@@ -62,13 +61,13 @@ class profiler:
         report_cycle = 0
         while True:
             time.sleep(0.5)  # A little delay so that this thread doesn't fry the CPU
-            
+
             # Every half-second report RAM usage of the currently-running container
             if report_cycle % 5 == 0:
                 self.metric["ram_usage"].append(get_container_memory())
             report_cycle += 1
 
-            print(self.metric)
+            # print(self.metric)
 
     # def parseData():
 
