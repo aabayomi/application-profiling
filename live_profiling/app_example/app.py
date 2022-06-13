@@ -13,7 +13,7 @@ if __name__ == '__main__':
     metric_service = profiler('firstprime.py')
     print(metric_service.metric)
 
-    job_list = [metric_service.runTau,metric_service.runSystemProfile]
+    job_list = [metric_service.runTau,metric_service.runSystemProfile,metric_service.run_tegrastats]
     job = thread(job_list)
     job.run_job
 

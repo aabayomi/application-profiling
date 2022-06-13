@@ -8,6 +8,7 @@ import logging
 import subprocess
 from pathlib import Path
 from waggle.plugin import Plugin
+from jtop import jtop
 
 
 def get_container_memory() -> int:
@@ -66,8 +67,18 @@ class profiler:
             if report_cycle % 5 == 0:
                 self.metric["ram_usage"].append(get_container_memory())
             report_cycle += 1
+            print(self.metric)
 
-            # print(self.metric)
+
+    def run_tegrastats(self):
+
+        print("Simple jtop reader")
+
+        with jtop() as jetson:
+            # jetson.ok() will provide the proper update frequency
+            while jetson.ok():
+                # Read tegra stats
+                print(jetson.stats)
 
     # def parseData():
 
