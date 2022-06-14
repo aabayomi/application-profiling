@@ -67,7 +67,7 @@ class profiler:
             # Records the tegrastarts of the host NVIDIA Nx device
                 with jtop() as jetson:
                     if jetson.ok():
-                        self.metric['tegrastats'] = jetson.get_stats
+                        self.metric['tegrastats'] = jetson.stats
             report_cycle += 1
             print(self.metric)
 
