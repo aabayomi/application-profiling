@@ -26,12 +26,15 @@ ENV PYTHONPATH=/tau-2.31.1/arm64_linux/lib/bindings-python
 COPY requirements.txt /app/
 # RUN pip3 install --no-cache-dir -r /app/requirements.txt
 
-COPY app.py live_metrics.py runtime_metrics.py thread.py /app/
+COPY app.py live_metrics.py runtime_metrics.py thread.py start.sh firstprime.py /app/
 COPY tegrastats /usr/bin/tegrastats
 
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
 
 RUN apt-get update && apt-get install -y vim
+
+ENTRYPOINT ["/bin/bash"]
+CMD ["start.sh"]
 
 # ENTRYPOINT ["python3", "/app/app.py"]
                                       
