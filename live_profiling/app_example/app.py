@@ -10,6 +10,15 @@ import sched,time
 
 s = sched.scheduler(time.time,time.sleep)
 
+
+
+def is_proccess_found(name):
+    is_running = False
+    for p in psutil.process_iter(attrs=["name","exe","cmdline"]):
+        if p.info["cmdline"] == ["python","firstprime.py"]:
+            is_running = True
+    return is_running
+
 if __name__ == '__main__':
     format = "%(asctime)s: %(message)s"
     logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
