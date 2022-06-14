@@ -7,6 +7,7 @@ import threading
 import logging
 import subprocess
 from pathlib import Path
+from datetime import datetime,timedelta
 from waggle.plugin import Plugin
 from jtop import jtop
 
@@ -24,15 +25,14 @@ class profiler:
         and host at the default socket path (unless otherwise specified as a str)
         """
 
-        self.metric = {"ram_usage": []}
+        self.metric = {}
         self.filename = filename
-
         self.socket_path = socket_path
         self.socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         self.connect_to_metrics_socket()
 
-        self.server_thread = threading.Thread(target=self.runSystemProfile)
-        self.server_thread.start()
+        #self.server_thread = threading.Thread(target=self.runSystemProfile)
+        #self.server_thread.start()
 
     def connect_to_metrics_socket(self):
         """
@@ -57,28 +57,21 @@ class profiler:
         """ This function looks for the Tau subprocess
             and records system utilization.
         """
-
         ## code reuse from luke's code
         report_cycle = 0
         while True:
             time.sleep(0.5)  # A little delay so that this thread doesn't fry the CPU
-
             # Every half-second report RAM usage of the currently-running container
             if report_cycle % 5 == 0:
-                self.metric["ram_usage"].append(get_container_memory())
+                self.metric["container_ram_usage"]= get_container_memory()
+            # Records the tegrastarts of the host NVIDIA Nx device
+                with jtop() as jetson:
+                    if jetson.ok():
+                        self.metric['tegrastats'] = jetson.get_stats
             report_cycle += 1
             print(self.metric)
 
 
-    def run_tegrastats(self):
-
-        print("Simple jtop reader")
-
-        with jtop() as jetson:
-            # jetson.ok() will provide the proper update frequency
-            while jetson.ok():
-                # Read tegra stats
-                print(jetson.stats)
 
     # def parseData():
 
