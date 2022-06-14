@@ -4,21 +4,53 @@ from thread import thread
 import logging
 import threading
 import time
+import os
+import psutil
+import sched,time
 
+s = sched.scheduler(time.time,time.sleep)
 
 if __name__ == '__main__':
     format = "%(asctime)s: %(message)s"
     logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
 
     metric_service = profiler('firstprime.py')
-    print(metric_service.metric)
+    #print(metric_service.metric)
 
-    job_list = [metric_service.runTau,metric_service.runSystemProfile]
-    job = thread(job_list)
-    job.run_job()
+    # job_list = [metric_service.runTau,metric_service.runSystemProfile]
+    # job = thread(job_list)
+    # job.run_job()
 
-    while True:
-        time.sleep(1)
+    def find_proccess(sc):
+        logging.info('Finding Application')
+        if is_proccess_found("firstprime.py") == True:
+            logging.info('Profiling Application')
+            metric_service.runSystemProfile
+        else:
+            logging.info('No Application to profile')
+        sc.enter(60,1,find_proccess,(sc,))
+    
+    s.enter(60,0,find_proccess,(s,))
+    s.run()
+
+
+
+
+    # logging.info('')
+
+
+
+
+
+
+
+
+
+
+
+
+    # while True:
+    #     time.sleep(1)
         # metric_service.
 
 

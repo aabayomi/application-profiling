@@ -57,7 +57,6 @@ class profiler:
         """ This function looks for the Tau subprocess
             and records system utilization.
         """
-        ## code reuse from luke's code
         report_cycle = 0
         while True:
             time.sleep(0.5)  # A little delay so that this thread doesn't fry the CPU
