@@ -53,6 +53,17 @@ class profiler:
         else:
             print("Cannot run Tau because ", self.filename, " not in directory")
 
+    def send_data(self):
+        with Plugin() as plugin:
+            if os.path.exists('profile.0.0.0'):
+                logging.info('Tau Profiling Completed')
+                logging.info('Sending Data to Beehive')
+                plugin.upload_file(profile.0.0.0, timestamp=datetime.now())
+            else:
+                logging.info("Sending System Data to Beehive")
+                plugin.publish(self.metric)
+
+
     def runSystemProfile(self):
         """ This function looks for the Tau subprocess
             and records system utilization.
@@ -69,6 +80,7 @@ class profiler:
                         self.metric['tegrastats'] = jetson.stats
             report_cycle += 1
             print(self.metric)
+            self.send_data()
 
 
 
