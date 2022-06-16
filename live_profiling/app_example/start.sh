@@ -1,2 +1,2 @@
-nohup python firstprime.py &
 python app.py &
+tau_python -ebs -T serial,python firstprime.py

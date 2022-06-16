@@ -60,7 +60,7 @@ class profiler:
             if os.path.exists('profile.0.0.0'):
                 logging.info('Tau Profiling Completed')
                 logging.info('Sending Data to Beehive')
-                plugin.upload_file(profile.0.0.0, timestamp=datetime.now())
+                plugin.upload_file('profile.0.0.0', timestamp=datetime.now())
             else:
                 logging.info("Sending System Data to Beehive")
                 plugin.publish('test.bytes',pickle.dumps(self.metric))

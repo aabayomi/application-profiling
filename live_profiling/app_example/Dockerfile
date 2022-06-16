@@ -35,10 +35,12 @@ RUN apt-get update && apt-get install -y vim
 
 RUN pip install -U jetson-stats && python -m pip install psutil
 
+RUN pip install -U pywaggle[all]
+
 WORKDIR /app
 
-ENTRYPOINT ["/bin/bash"]
-CMD ["start.sh"]
+# ENTRYPOINT ["/bin/bash"]
+# CMD ["start.sh"]
 
 # ENTRYPOINT ["python3", "/app/app.py"]
                                       
