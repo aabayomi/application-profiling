@@ -6,6 +6,8 @@ import time
 import threading
 import logging
 import subprocess
+import os
+import pickle
 from pathlib import Path
 from datetime import datetime,timedelta
 from waggle.plugin import Plugin
@@ -61,7 +63,7 @@ class profiler:
                 plugin.upload_file(profile.0.0.0, timestamp=datetime.now())
             else:
                 logging.info("Sending System Data to Beehive")
-                plugin.publish(self.metric)
+                plugin.publish('test.bytes',pickle.dumps(self.metric))
 
 
     def runSystemProfile(self):
@@ -69,18 +71,29 @@ class profiler:
             and records system utilization.
         """
         report_cycle = 0
-        while True:
-            time.sleep(0.5)  # A little delay so that this thread doesn't fry the CPU
-            # Every half-second report RAM usage of the currently-running container
-            if report_cycle % 5 == 0:
-                self.metric["container_ram_usage"]= get_container_memory()
-            # Records the tegrastarts of the host NVIDIA Nx device
-                with jtop() as jetson:
-                    if jetson.ok():
-                        self.metric['tegrastats'] = jetson.stats
-            report_cycle += 1
-            print(self.metric)
-            self.send_data()
+        # Every half-second report RAM usage of the currently-running container
+        # if report_cycle % 5 == 0:
+        self.metric["container_ram_usage"]= get_container_memory()
+        # Records the tegrastarts of the host NVIDIA Nx device
+        with jtop() as jetson:
+            if jetson.ok():
+                self.metric['tegrastats'] = jetson.stats
+        # print(self.metric)
+        self.send_data()
+
+        # report_cycle = 0
+        # while True:
+        #     time.sleep(0.5)  # A little delay so that this thread doesn't fry the CPU
+        #     # Every half-second report RAM usage of the currently-running container
+        #     if report_cycle % 5 == 0:
+        #         self.metric["container_ram_usage"]= get_container_memory()
+        #     # Records the tegrastarts of the host NVIDIA Nx device
+        #         with jtop() as jetson:
+        #             if jetson.ok():
+        #                 self.metric['tegrastats'] = jetson.stats
+        #     report_cycle += 1
+        #     #print(self.metric)
+        #     self.send_data()
 
 
 

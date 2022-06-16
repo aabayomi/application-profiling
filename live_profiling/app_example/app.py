@@ -34,7 +34,7 @@ if __name__ == '__main__':
         logging.info('Finding Application')
         if is_proccess_found("firstprime.py") == True:
             logging.info('Profiling Application')
-            metric_service.runSystemProfile
+            metric_service.runSystemProfile()
         else:
             logging.info('No Application to profile')
         sc.enter(60,1,find_proccess,(sc,))
