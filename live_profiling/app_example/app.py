@@ -15,7 +15,7 @@ s = sched.scheduler(time.time,time.sleep)
 def is_proccess_found(name):
     is_running = False
     for p in psutil.process_iter(attrs=["name","exe","cmdline"]):
-        if p.info["cmdline"] == ["python","firstprime.py"]:
+        if p.info["cmdline"] == ["python","-m","tau_python_wrapper","firstprime.py"]:
             is_running = True
     return is_running
 
@@ -37,9 +37,9 @@ if __name__ == '__main__':
             metric_service.runSystemProfile()
         else:
             logging.info('No Application to profile')
-        sc.enter(60,1,find_proccess,(sc,))
+        sc.enter(1,1,find_proccess,(sc,))
     
-    s.enter(60,0,find_proccess,(s,))
+    s.enter(1,0,find_proccess,(s,))
     s.run()
 
 
