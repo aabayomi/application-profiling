@@ -9,6 +9,7 @@ import psutil
 import sched,time
 
 s = sched.scheduler(time.time,time.sleep)
+stack = []
 
 
 
@@ -19,6 +20,21 @@ def is_proccess_found(name):
             is_running = True
     return is_running
 
+def find_proccess(stack):
+    logging.info('Finding Application')
+    if is_proccess_found("firstprime.py") == True:
+        if len(stack) == 0:
+            stack.push(time.time)
+            logging.info('Profiling Application Started')
+        else:
+            logging.info('Profiling ... ')
+        metric_service.runSystemProfile()
+    else:
+        if len(stack) == 1:
+            stack.push(time.time)
+        logging.info('No Application to profile')
+   
+    
 if __name__ == '__main__':
     format = "%(asctime)s: %(message)s"
     logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
@@ -30,17 +46,32 @@ if __name__ == '__main__':
     # job = thread(job_list)
     # job.run_job()
 
-    def find_proccess(sc):
-        logging.info('Finding Application')
-        if is_proccess_found("firstprime.py") == True:
-            logging.info('Profiling Application')
-            metric_service.runSystemProfile()
-        else:
-            logging.info('No Application to profile')
-        sc.enter(1,1,find_proccess,(sc,))
+    job.schedule.every(2).seconds.do(find_proccess,stack)
+
+    while True:
+        if len(stack) == 2:
+            schedule.cancel_job(job)
+            logging.info("Profiling completed")
+            break
+        time.sleep(1)
+        
     
-    s.enter(1,0,find_proccess,(s,))
-    s.run()
+
+
+   
+
+
+    # def find_proccess(sc):
+    #     logging.info('Finding Application')
+    #     if is_proccess_found("firstprime.py") == True:
+    #         logging.info('Profiling Application')
+    #         metric_service.runSystemProfile()
+    #     else:
+    #         logging.info('No Application to profile')
+    #     sc.enter(1,1,find_proccess,(sc,))
+    
+    # s.enter(1,0,find_proccess,(s,))
+    # s.run()
 
 
 

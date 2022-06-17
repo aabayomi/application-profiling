@@ -16,5 +16,5 @@ def firstPrimeAfter(x):
                                 return current
                 current += 1
 
-for i in range(10000000):
+for i in range(100000):
     firstPrimeAfter(i)
