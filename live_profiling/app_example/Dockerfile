@@ -33,7 +33,7 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
 
 RUN apt-get update && apt-get install -y vim
 
-RUN pip install -U jetson-stats && python -m pip install psutil
+RUN pip install -U jetson-stats && python -m pip install psutil && pip install schedule
 
 RUN pip install -U pywaggle[all]
 

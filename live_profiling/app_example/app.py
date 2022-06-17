@@ -6,7 +6,7 @@ import threading
 import time
 import os
 import psutil
-import sched,time
+import sched,schedule,time
 
 s = sched.scheduler(time.time,time.sleep)
 stack = []
@@ -46,9 +46,10 @@ if __name__ == '__main__':
     # job = thread(job_list)
     # job.run_job()
 
-    job.schedule.every(2).seconds.do(find_proccess,stack)
+    job = schedule.every(2).seconds.do(find_proccess,stack)
 
     while True:
+        schedule.run_pending()
         if len(stack) == 2:
             schedule.cancel_job(job)
             logging.info("Profiling completed")
