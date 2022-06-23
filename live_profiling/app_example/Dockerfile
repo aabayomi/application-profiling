@@ -26,7 +26,7 @@ ENV PYTHONPATH=/tau-2.31.1/arm64_linux/lib/bindings-python
 COPY requirements.txt /app/
 # RUN pip3 install --no-cache-dir -r /app/requirements.txt
 
-COPY app.py live_metrics.py runtime_metrics.py thread.py start.sh firstprime.py /app/
+COPY app.py live_metrics.py runtime_metrics.py thread.py start.sh firstprime.py tau_parser.py /app/
 COPY tegrastats /usr/bin/tegrastats
 
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1

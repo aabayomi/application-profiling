@@ -46,6 +46,15 @@ if __name__ == '__main__':
     # job = thread(job_list)
     # job.run_job()
 
+    # def find_proccess(sc):
+    #     logging.info('Finding Application')
+    #     if is_proccess_found("firstprime.py") == True:
+    #         logging.info('Profiling Application')
+    #         metric_service.runSystemProfile()
+    #     else:
+    #         logging.info('No Application to profile')
+    #     sc.enter(60,1,find_proccess,(sc,))
+
     job = schedule.every(2).seconds.do(find_proccess,stack)
 
     while True:

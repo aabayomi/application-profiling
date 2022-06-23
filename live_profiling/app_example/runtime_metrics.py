@@ -8,6 +8,7 @@ import logging
 import subprocess
 import os
 import pickle
+from tau_parser import parser
 from pathlib import Path
 from datetime import datetime,timedelta
 from waggle.plugin import Plugin
@@ -97,13 +98,15 @@ class profiler:
 
 
 
-    # def parseData():
+    def parseData():
 
-    #     """ Parses the data from Tau and System Utilization
-    #         sends to beehive via pywaggle
-    #     """
-
-
-### 1 - run tau ??
-### 2 - run captures system utilization while profiling
-### 3 - parse data
+        """ Parses the data from Tau and System Utilization
+            sends to beehive via pywaggle
+        """
+        p = parser()
+        data = OrderedDict()
+        index = 1
+        print ("Processing:", indir)
+        p.parse_directory(indir, index, data)
+        
+        return json.dumps(data, indent=2, sort_keys=False)
