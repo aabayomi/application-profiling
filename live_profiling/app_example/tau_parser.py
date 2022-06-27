@@ -20,7 +20,7 @@ class parser:
     """
         Parse the "invalid" TAU XML
     """
-    def parse_tau_xml(instring):
+    def parse_tau_xml(self,instring):
         mydict = OrderedDict()
         tmp = instring
         metadata_tokens = tmp.split("<metadata>",1)
@@ -64,7 +64,7 @@ class parser:
         # print(args)
         return args
 
-    def parse_functions(node, context, thread, infile, data, num_functions, function_map):
+    def parse_functions(self,node, context, thread, infile, data, num_functions, function_map):
         # Function looks like:
         # "".TAU application" 1 0 8626018 8626018 0 GROUP="TAU_USER""
         if num_functions > 0:
@@ -126,7 +126,7 @@ class parser:
                 timer["Inclusive Time"] = int(tokens[3])
                 data["Timers"].append(timer)
         
-    def parse_aggregates(node, context, thread, infile, data):
+    def parse_aggregates(self,node, context, thread, infile, data):
         aggregates = infile.readline()
         tokens = aggregates.split()
         num_aggregates = int(tokens[0])
@@ -135,7 +135,7 @@ class parser:
             # do nothing
             line = infile.readline()
 
-    def parse_counters(node, context, thread, infile, data, counter_map):
+    def parse_counters(self,node, context, thread, infile, data, counter_map):
         userevents = infile.readline()
         tokens = userevents.split()
         
@@ -232,11 +232,11 @@ class parser:
         thread_name = "Rank " + str(node) + ", Thread " + str(thread)
         data["metadata"][thread_name] = parse_tau_xml(str.strip(tokens[2]))
         # Parse the functions
-        parse_functions(node, context, thread, infile, data, num_functions, function_map)
+        self.parse_functions(node, context, thread, infile, data, num_functions, function_map)
         # Parse the aggregates
-        parse_aggregates(node, context, thread, infile, data)
+        self.parse_aggregates(node, context, thread, infile, data)
         # Parse the counters
-        parse_counters(node, context, thread, infile, data, counter_map)
+        self.parse_counters(node, context, thread, infile, data, counter_map)
 
     """
     This method will parse a directory of TAU profiles

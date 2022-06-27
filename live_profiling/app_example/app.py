@@ -24,14 +24,14 @@ def find_proccess(stack):
     logging.info('Finding Application')
     if is_proccess_found("firstprime.py") == True:
         if len(stack) == 0:
-            stack.push(time.time)
+            stack.append(time.time())
             logging.info('Profiling Application Started')
         else:
             logging.info('Profiling ... ')
         metric_service.runSystemProfile()
     else:
         if len(stack) == 1:
-            stack.push(time.time)
+            stack.append(time.time())
         logging.info('No Application to profile')
    
     

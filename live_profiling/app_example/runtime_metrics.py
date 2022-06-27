@@ -9,6 +9,7 @@ import subprocess
 import os
 import pickle
 from tau_parser import parser
+from collections import OrderedDict
 from pathlib import Path
 from datetime import datetime,timedelta
 from waggle.plugin import Plugin
@@ -27,7 +28,7 @@ class profiler:
             {metric_name: METRIC_TYPE}
         and host at the default socket path (unless otherwise specified as a str)
         """
-
+        self.indir = os.getcwd()
         self.metric = {}
         self.filename = filename
         self.socket_path = socket_path
@@ -59,9 +60,12 @@ class profiler:
     def send_data(self):
         with Plugin() as plugin:
             if os.path.exists('profile.0.0.0'):
+                self.parseData()
                 logging.info('Tau Profiling Completed')
                 logging.info('Sending Data to Beehive')
-                plugin.upload_file('profile.0.0.0', timestamp=datetime.now())
+                # plugin.upload_file('profile.0.0.0', timestamp=datetime.now())
+                plugin.publish('test.bytes',pickle.dumps(self.parseData()))
+
             else:
                 logging.info("Sending System Data to Beehive")
                 plugin.publish('test.bytes',pickle.dumps(self.metric))
@@ -82,31 +86,38 @@ class profiler:
         # print(self.metric)
         self.send_data()
 
-        # report_cycle = 0
-        # while True:
-        #     time.sleep(0.5)  # A little delay so that this thread doesn't fry the CPU
-        #     # Every half-second report RAM usage of the currently-running container
-        #     if report_cycle % 5 == 0:
-        #         self.metric["container_ram_usage"]= get_container_memory()
-        #     # Records the tegrastarts of the host NVIDIA Nx device
-        #         with jtop() as jetson:
-        #             if jetson.ok():
-        #                 self.metric['tegrastats'] = jetson.stats
-        #     report_cycle += 1
-        #     #print(self.metric)
-        #     self.send_data()
+       
 
 
-
-    def parseData():
+    def parseData(self):
 
         """ Parses the data from Tau and System Utilization
             sends to beehive via pywaggle
         """
-        p = parser()
+        tau = parser()
         data = OrderedDict()
         index = 1
-        print ("Processing:", indir)
-        p.parse_directory(indir, index, data)
+        print ("Processing:", self.indir)
+        # p.parse_directory(self.indir, index, data)
+
+
+        application = OrderedDict()
+        #application["source directory"] = indir
+
+        # add the application to the master dictionary
+        # tmp = "Application " + str(index)
+        #data[tmp] = application
+        data[self.indir] = application
+        
+        # get the list of profile files
+        profiles = [f for f in os.listdir(indir) if os.path.isfile(os.path.join (self.indir, f))]
+        #application["num profiles"] = len(profiles)
+
+        application["metadata"] = OrderedDict()
+        function_map = {}
+        counter_map = {}
+        for p in profiles:
+            if p == 'profile.0.0.0':
+                tau.parse_profile(p, application, function_map, counter_map)        
         
         return json.dumps(data, indent=2, sort_keys=False)
