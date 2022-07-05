@@ -60,11 +60,11 @@ class profiler:
     def send_data(self):
         with Plugin() as plugin:
             if os.path.exists('profile.0.0.0'):
-                self.parseData()
+                self.parse()
                 logging.info('Tau Profiling Completed')
                 logging.info('Sending Data to Beehive')
                 # plugin.upload_file('profile.0.0.0', timestamp=datetime.now())
-                plugin.publish('test.bytes',pickle.dumps(self.parseData()))
+                plugin.publish('test.bytes',pickle.dumps(self.parse()))
 
             else:
                 logging.info("Sending System Data to Beehive")
@@ -75,21 +75,18 @@ class profiler:
         """ This function looks for the Tau subprocess
             and records system utilization.
         """
-        report_cycle = 0
-        # Every half-second report RAM usage of the currently-running container
-        # if report_cycle % 5 == 0:
-        self.metric["container_ram_usage"]= get_container_memory()
+        self.metric["container_ram_usage"] = get_container_memory()
         # Records the tegrastarts of the host NVIDIA Nx device
-        with jtop() as jetson:
-            if jetson.ok():
-                self.metric['tegrastats'] = jetson.stats
+        # with jtop() as jetson:
+        #     if jetson.ok():
+        #         self.metric['tegrastats'] = jetson.stats
         # print(self.metric)
         self.send_data()
 
        
 
 
-    def parseData(self):
+    def parse(self):
 
         """ Parses the data from Tau and System Utilization
             sends to beehive via pywaggle
@@ -110,7 +107,7 @@ class profiler:
         data[self.indir] = application
         
         # get the list of profile files
-        profiles = [f for f in os.listdir(indir) if os.path.isfile(os.path.join (self.indir, f))]
+        profiles = [f for f in os.listdir(self.indir) if os.path.isfile(os.path.join (self.indir, f))]
         #application["num profiles"] = len(profiles)
 
         application["metadata"] = OrderedDict()
