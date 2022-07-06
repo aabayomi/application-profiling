@@ -1,0 +1,11 @@
+version: '3'
+services:
+  appy:
+    build : .
+    ports:
+      - "8000:80"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/Users/abayomi/Desktop/metrics:/app/output"
+    environment:
+      PYWAGGLE_LOG_DIR : /app/output

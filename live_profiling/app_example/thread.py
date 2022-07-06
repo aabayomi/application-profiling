@@ -1,25 +1,35 @@
-import logging
-import threading
-import time
+import sys, getopt
 
-class thread:
-    def __init__(self,jobs):
-        self.jobs = jobs
 
-    # def thread_function(name):
-    #     logging.info("Thread %s: starting", name)
-    #     time.sleep(2)
-    #     logging.info("Thread %s: finishing", name)
+def main(argv):
 
-    def run_job(self):
-        threads = list()
-        for index in range(len(self.jobs)):
-            logging.info("Main    : create and start thread %d.", index)
-            x = threading.Thread(target=self.jobs[index])
-            threads.append(x)
-            x.start()
+    # default algorithm:
+    algorithm = 1
 
-        for index, thread in enumerate(threads):
-            logging.info("Main    : before joining thread %d.", index)
-            thread.join()
-            logging.info("Main    : thread %d done", index)
+    # parse command line options:
+    try:
+       opts, args = getopt.getopt(argv,"hr:l",["runtime=","live="])
+    except getopt.GetoptError:
+       print("Error")
+       sys.exit(2)
+
+    for opt, arg in opts:
+       print(opt)
+       print(arg)
+       if opt == "-h":
+         print('test.py -i <inputfile> -o <outputfile>')
+         sys.exit()
+       elif opt in ("-l", "--live"):
+         print("live")
+       elif opt in ("-r", "--runtime"):
+          # use alternative algorithm:
+          algorithm = arg
+
+    print("Using algorithm: ", algorithm)
+
+    # Positional command line arguments (i.e. non optional ones) are
+    # still available via 'args':
+    print("Positional args: ", args)
+
+if __name__ == "__main__":
+   main(sys.argv[1:])
